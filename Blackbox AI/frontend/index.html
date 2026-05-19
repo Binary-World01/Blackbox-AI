@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BlackBox AI Quant Lab</title>
+    <link rel="stylesheet" href="/styles.css?v=17" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="app-header">
+        <div class="brand-block">
+          <div class="brand-mark">BQ</div>
+          <div>
+            <p class="eyebrow">BlackBox AI</p>
+            <h1>Quant Strategy Lab</h1>
+            <p class="header-copy">Agentic strategy research, yfinance market data, Hindsight memory, and local backtest validation.</p>
+          </div>
+        </div>
+        <div class="header-telemetry">
+          <div class="telemetry-card">
+            <span>AI Router</span>
+            <strong id="providerLabel">Groq route checking</strong>
+          </div>
+          <div class="telemetry-card">
+            <span>Data Lane</span>
+            <strong>yfinance</strong>
+          </div>
+          <div class="telemetry-card live-card">
+            <span class="status-dot"></span>
+            <strong>online</strong>
+          </div>
+        </div>
+      </header>
+
+      <section class="control-bar">
+        <div class="symbol-search">
+          <label for="symbolInput">Search asset</label>
+          <div class="search-row">
+            <input id="symbolInput" value="Tesla" autocomplete="off" spellcheck="false" />
+            <button id="searchBtn">Search</button>
+          </div>
+          <div id="suggestions" class="suggestions"></div>
+        </div>
+        <button id="loadMarketBtn">Load Market</button>
+        <button id="startBtn" class="primary">Optimize TSLA</button>
+        <div class="market-meta">
+          <span id="activeSymbol">TSLA</span>
+          <span id="dataSource">waiting for yfinance</span>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <section class="panel market-panel">
+          <div class="panel-head">
+            <div>
+              <span class="panel-title">Market Console</span>
+              <small id="candleCount">-- candles</small>
+            </div>
+            <span id="liveBadge" class="badge">live polling</span>
+          </div>
+          <div id="tvChart" class="tv-chart"></div>
+          <canvas id="priceChart" class="fallback-chart" width="920" height="430"></canvas>
+          <div class="chart-footer">
+            <div><span>Open</span><strong id="openMetric">--</strong></div>
+            <div><span>High</span><strong id="highMetric">--</strong></div>
+            <div><span>Low</span><strong id="lowMetric">--</strong></div>
+            <div><span>Close</span><strong id="closeMetric">--</strong></div>
+            <div><span>RSI 14</span><strong id="rsiMetric">--</strong></div>
+            <div><span>SMA 20</span><strong id="sma20Metric">--</strong></div>
+            <div><span>SMA 50</span><strong id="sma50Metric">--</strong></div>
+            <div><span>Pattern</span><strong id="patternMetric">--</strong></div>
+          </div>
+        </section>
+
+        <aside class="panel debate-panel">
+          <div class="panel-head">
+            <div>
+              <span class="panel-title">Agent Debate</span>
+              <small>Q-Researcher / Q-Trader</small>
+            </div>
+            <span id="modePill" class="badge">standby</span>
+          </div>
+          <div id="debateFeed" class="terminal-feed"></div>
+          <form id="feedbackForm" class="feedback">
+            <textarea id="feedbackInput" placeholder="Feedback for Hindsight: make it conservative, lower drawdown, add SMA filter"></textarea>
+            <button type="submit">Resume Loop</button>
+          </form>
+        </aside>
+      </section>
+
+      <section class="panel inspector-panel">
+        <div class="panel-head">
+          <div>
+            <span class="panel-title">Strategy Inspector</span>
+            <small>Agent-generated algorithm and tested results</small>
+          </div>
+          <span id="strategyStatus" class="badge">load market first</span>
+        </div>
+        <div class="inspector-grid">
+          <div class="inspector-card">
+            <span>Selected Algorithm</span>
+            <strong id="strategyName">--</strong>
+            <p id="strategyLogic">Load an asset, then press Optimize. The selected agent algorithm will appear here.</p>
+          </div>
+          <div class="inspector-card">
+            <span>Backtest Frame</span>
+            <strong id="strategyFrame">--</strong>
+            <p id="strategyData">No backtest has been run in this browser session yet.</p>
+          </div>
+          <div class="inspector-card params-card">
+            <span>Parameters</span>
+            <div id="strategyParams" class="param-grid"></div>
+          </div>
+        </div>
+        <div class="result-tables">
+          <div>
+            <div class="table-head">
+              <span>Last Executed Trades</span>
+              <small id="tradeSummary">--</small>
+            </div>
+            <div id="tradeTable" class="mini-table"></div>
+          </div>
+          <div>
+            <div class="table-head">
+              <span>Top Tested Candidates</span>
+              <small id="candidateSummary">--</small>
+            </div>
+            <div id="candidateTable" class="mini-table"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="lower-grid">
+        <section class="panel code-panel">
+          <div class="panel-head">
+            <span class="panel-title">Generated Strategy</span>
+            <span class="badge">Python</span>
+          </div>
+          <pre id="codeCanvas"><code># Load market data, then run Optimize.</code></pre>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <span class="panel-title">Hindsight Memory</span>
+            <span id="memoryCount" class="badge">0 nodes</span>
+          </div>
+          <div id="memoryWeb" class="memory-list"></div>
+        </section>
+
+        <section class="panel metrics-panel">
+          <div class="panel-head">
+            <span class="panel-title">Backtest Analytics</span>
+            <span id="roiBadge" class="badge">ROI --</span>
+          </div>
+          <div class="metrics">
+            <div><span>Drawdown</span><strong id="drawdownMetric">--</strong></div>
+            <div><span>Sharpe</span><strong id="sharpeMetric">--</strong></div>
+            <div><span>Win Rate</span><strong id="winMetric">--</strong></div>
+            <div><span>Trades</span><strong id="tradeMetric">--</strong></div>
+            <div><span>Profit Factor</span><strong id="profitFactorMetric">--</strong></div>
+            <div><span>Alpha</span><strong id="alphaMetric">--</strong></div>
+            <div><span>Avg Trade</span><strong id="avgTradeMetric">--</strong></div>
+            <div><span>Exposure</span><strong id="exposureMetric">--</strong></div>
+          </div>
+          <canvas id="yieldChart" width="460" height="160"></canvas>
+          <div class="cascade">
+            <div class="cascade-top">
+              <span>cascadeflow</span>
+              <strong id="savingsMetric">--</strong>
+            </div>
+            <p id="costCopy">Waiting for route telemetry.</p>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="https://unpkg.com/lightweight-charts@5.0.9/dist/lightweight-charts.standalone.production.js"></script>
+    <script src="/app.js?v=17"></script>
+  </body>
+</html>
